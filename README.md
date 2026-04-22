@@ -1,23 +1,25 @@
 # Projeto A3 - Modelagem de Retrato Falado e Reconhecimento Facial
 
 ## Descrição do Projeto
-Este sistema integra técnicas de Computação Gráfica e Visão Computacional aplicadas à perícia forense. O objetivo é permitir a construção de rostos no formato de mosaico a partir de componentes faciais reais e submeter a composição final a um algoritmo de Inteligência Artificial para cruzamento de dados com um banco criminal, gerando um ranking de similaridade.
+Este sistema integra técnicas avançadas de Computação Gráfica, Processamento de Imagens e Visão Computacional aplicadas à perícia forense. O objetivo é permitir a construção de rostos no formato de mosaico a partir de componentes faciais reais e submeter a composição final a um algoritmo de Inteligência Artificial para cruzamento de dados com um banco criminal.
 
 Trabalho acadêmico desenvolvido para a unidade curricular de Computação Gráfica e Realidade Virtual (Una Uberlândia).
 
 ## Funcionalidades e Soluções Técnicas
-1. **Manequim Universal e Puzzle Cut:** Utilização de uma "tela em branco" padronizada. As peças do rosto (olhos, nariz e boca) são extraídas e inseridas utilizando recortes poligonais precisos que se encaixam perfeitamente, sem sobreposições grosseiras.
-2. **Feathering (Suavização de Bordas):** Aplicação de desfoque gaussiano no Canal Alpha das imagens. Isso permite uma fusão de pele em degradê, disfarçando as linhas de corte e criando uma composição realista.
-3. **Interface Live Preview:** Interface gráfica desenvolvida em `CustomTkinter` que permite a montagem do rosto em tempo real. Inclui a funcionalidade de **Geração Aleatória** para testes rápidos.
-4. **Equalização de Histograma:** Normalização da iluminação (`cv2.equalizeHist`) para nivelar o contraste entre as diferentes peças do rosto e as fotos originais do banco de dados.
-5. **Reconhecimento Biométrico Avançado:** Motor de reconhecimento baseado em **LBPH** (Local Binary Patterns Histograms). O sistema utiliza alinhamento matemático rigoroso, garantindo que o algoritmo processe o rosto gerado sob a exata mesma escala de proporção e zoom das fotos do banco de dados, retornando um Top 5 de suspeitos.
+1. **Composição Gráfica Avançada (Puzzle Cut & Feathering):** Extração de feições (olhos, nariz e boca) utilizando recortes poligonais precisos e desfoque gaussiano no Canal Alpha. O algoritmo garante um encaixe sem sobreposições grosseiras, fundindo a pele de diferentes sujeitos de forma realista em um "manequim universal".
+2. **Interface UI/UX Forense:** Dashboard imersivo e responsivo desenvolvido em `CustomTkinter`. Apresenta uma galeria com layout flexível, miniaturas contextualizadas no formato do rosto e embaralhamento dinâmico (anti-vício de seleção).
+3. **Pré-Processamento com CLAHE:** Utilização de Equalização de Histograma Adaptativo Limitado por Contraste (`cv2.createCLAHE`) para normalizar a iluminação e realçar microtexturas da pele sem estourar o brilho.
+4. **Reconhecimento Biométrico por Ensemble Learning:** Em vez de uma análise global falha, o rosto é fatiado horizontalmente. O sistema utiliza três redes neurais **LBPH** independentes, aplicando uma média ponderada para o ranking: Olhos (45%), Nariz (30%) e Boca (25%).
+5. **Exportação Ética (Blind Test):** Para evitar viés de confirmação testemunhal, a interface não exibe os resultados da IA. O sistema gera um Laudo Técnico Automático (`relatorio_forense.txt`) e converte/exporta as fotos originais (`.pgm`) do Top 5 suspeitos para uma pasta segura em `.png`.
 
 ## Tecnologias Utilizadas
-* **Linguagem:** Python 3.14.4
-* **Bibliotecas Principais:** OpenCV (Processamento e ML), Pillow (Manipulação Alpha/Camadas), CustomTkinter (GUI) e NumPy (Operações Matriciais).
-* **Base de Dados:** AT&T Face Database (ORL) - 40 indivíduos padronizados. *(Nota: O processamento foca exclusivamente no núcleo facial, descartando características periféricas como cabelo por limitações de enquadramento da base de dados).*
+* **Linguagem:** Python 3.x
+* **Visão Computacional e ML:** OpenCV (Haar Cascades, Filtros CLAHE/Gaussian, LBPHFaceRecognizer).
+* **Computação Gráfica:** Pillow (Manipulação Avançada de Máscaras e Canal Alpha).
+* **Interface Gráfica:** CustomTkinter.
+* **Base de Dados:** AT&T Face Database (ORL) - 40 indivíduos padronizados.
 
-## Como executar
-* Instale as dependências executando: pip install -r requirements.txt
-* Execute o extrator para popular a pasta assets com as feições recortadas (necessário apenas na primeira execução do projeto): python src/extrator_automatico.py
-* Inicie o sistema forense: python src/interface.py
+## Como Executar
+1. Instale as dependências executando: pip install -r requirements.txt
+2. Execute o extrator para fatiar toda a base de dados criminal e popular a pasta assets (necessário apenas na primeira execução ou caso atualize o dataset): python src/extrator_automatico.py
+3. Inicie o painel do sistema forense: python src/interface.py
